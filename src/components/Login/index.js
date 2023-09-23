@@ -1,6 +1,7 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {LoginContainer} from '../../StyledComponents'
+import {LoginButton, LoginFormContainer} from './StylingLogin'
 
 class Login  extends Component {
   state = {username:"", password:"", errorMsg:"", showPass:false}
@@ -58,17 +59,19 @@ class Login  extends Component {
         <LoginContainer>
         <div>
         <img src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png" alt="website logo" />
-        <form onSubmit={this.submitLoginForm} className="login-form">
+        <LoginFormContainer onSubmit={this.submitLoginForm} className="login-form">
         <label htmlFor="username">USERNAME</label>
         <input id="username" type="text" onChange={this.changeUsername}  placeholder="Username"/>
         <label htmlFor="pass">PASSWORD</label>
         {showPass ? 
         <input id="pass" type="text" onChange={this.changePass} placeholder="Password"  /> : <input id="pass" type="password" onChange={this.changePass} placeholder="Password"/>}
+        <div>
         <input id="show" onClick={this.toggleCheckBox} type="checkbox" />
         <label htmlFor="show">Show Password</label>
-        <button type="submit" className="login-button">Login</button>
+        </div>
+        <LoginButton type="submit">Login</LoginButton>
         <p>{errorMsg}</p>
-        </form>
+        </LoginFormContainer>
         </div>
         </LoginContainer>
     )

@@ -1,10 +1,14 @@
+import Popup from 'reactjs-popup'
+
+import 'reactjs-popup/dist/index.css'
 import Header from '../Header'
 import SideBar from '../SideBar'
 import {HomeContainer} from '../../StyledComponents'
 import NextContext from '../../context/NextContext'
 import './index.css'
 
-const NotFound = () =>(
+const NotFound = () =>{
+  return (
     <NextContext.Consumer>
     {value => {
     const {darkTheme, changeTheme, showAdd, deleteAdd } = value
@@ -32,7 +36,8 @@ const NotFound = () =>(
         )
     }}
     </NextContext.Consumer>
-)
+    )
+}
 
 
 export default NotFound

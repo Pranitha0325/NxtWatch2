@@ -1,13 +1,16 @@
 
 import {Component} from 'react'
 import {Link} from 'react-router-dom'
+import Popup from 'reactjs-popup'
+
+import 'reactjs-popup/dist/index.css'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import NextContext from '../../context/NextContext'
 import Header from '../Header'
 import SideBar from '../SideBar'
 import Add from '../Add'
-import {HomeContainer, Input} from '../../StyledComponents'
+import {HomeContainer, Dark, Light} from '../../StyledComponents'
 import './index.css'
 
 const api = {initial:"INITIAL", inProgress:"INPROGRESS", success:"SUCCESS", failure:"FAILURE"}
@@ -93,7 +96,7 @@ class Trending extends Component {
         <ul className="list">
         {data.map((item) => (
           <li className="items" key={item.id}>
-          <Link to={`/videos/${item.id}`} >
+          <Link to={`/videos/${item.id}`} className="link" >
           <img className="image" src={item.thumbnailUrl} alt="video thumbnail" />
           <div>
           <p>{item.title}</p>
@@ -110,6 +113,88 @@ class Trending extends Component {
     }
     return this.failureView()
   }
+
+  renderHeader = () => (
+    <NextContext.Consumer>
+    {value => {
+      const {darkTheme, changeTheme} = value
+
+  const changeLogo = () => {
+    changeTheme()
+  }
+  const renderLogoutButton = () => {
+    const {history} = this.props 
+    Cookies.remove("jwt_token")
+    history.replace("/login")
+    
+  }
+  console.log("header")
+  return (
+    <div>
+    {darkTheme ? <Dark className="header-dark" data-testid="trending">
+    <Link to="/" >
+    <img src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png" alt="website logo" />
+    </Link>
+    <div>
+    <img onClick={changeLogo} className="dark-logo" src="https://media.istockphoto.com/id/1278486961/vector/moon-simple-icon-logo.jpg?s=612x612&w=0&k=20&c=nzNELqLZxTXHnFG9GLSggr8PsBpp9AjWRf9wfPJonSk=" />
+    <img data-testid="theme" className="dark-logo" src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png" alt="profile" />
+    <div>
+    <Popup 
+    model 
+    trigger = {
+      <button  type="button">Logout</button>
+    } position = "absotule"
+    >
+    {close => (
+      <>
+      <div>
+      <p>Are you sure, you want to logout</p>
+      </div>
+      <div>
+      <button type ="button" onClick={()=>close()}>Cancel</button>
+      <button type="button" onClick={renderLogoutButton}>Confirm</button>
+      </div>
+      </>
+    )}
+    </Popup>
+    </div>
+    </div> 
+    </Dark> : 
+    <Light className="header-light" data-testid="trending">
+    <Link to="/">
+    <img src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png" alt="website logo" />
+    </Link>
+    <div>
+    <img onClick={changeLogo} className="dark-logo" src="https://media.istockphoto.com/id/1278486961/vector/moon-simple-icon-logo.jpg?s=612x612&w=0&k=20&c=nzNELqLZxTXHnFG9GLSggr8PsBpp9AjWRf9wfPJonSk=" />
+    <img data-testid="theme" className="dark-logo" src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png" alt="profile" />
+    <div>
+    <Popup 
+    model 
+    trigger = {
+      <button  type="button">Logout</button>
+    } position = "absotule"
+    >
+    {close => (
+      <>
+      <div>
+      <p>Are you sure, you want to logout</p>
+      </div>
+      <div>
+      <button type ="button" onClick={()=>close()}>Cancel</button>
+      <button type="button" onClick={renderLogoutButton}>Confirm</button>
+      </div>
+      </>
+    )}
+    </Popup>
+    </div>
+    </div>
+    </Light>
+    }
+    </div>
+  )
+    }}
+    </NextContext.Consumer>
+  )
   
   render () {
     const {apiStatus} = this.state 
@@ -120,8 +205,8 @@ class Trending extends Component {
     const {darkTheme, changeTheme, showAdd, deleteAdd } = value
      
       return (
-                <div>
-        <Header theme={darkTheme} changeTheme={changeTheme}/>
+        <div>
+        {this.renderHeader()}
         <HomeContainer background={darkTheme}>
         <div>
         <SideBar theme = {darkTheme} />

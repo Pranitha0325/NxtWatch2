@@ -3,10 +3,12 @@ import Cookies from 'js-cookie'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import {AiOutlineSearch} from 'react-icons/ai'
-import Header from '../Header'
+import Popup from 'reactjs-popup'
+
+import 'reactjs-popup/dist/index.css'
 import SideBar from '../SideBar'
 import Add from '../Add'
-import {HomeContainer, Input} from '../../StyledComponents'
+import {HomeContainer, Input, Dark, Light} from '../../StyledComponents'
 import NextContext from '../../context/NextContext'
 
 import './index.css'
@@ -137,6 +139,88 @@ class Home extends Component{
     }
   }
 
+  renderHeader = () => (
+    <NextContext.Consumer>
+    {value => {
+      const {darkTheme, changeTheme} = value
+
+  const changeLogo = () => {
+    changeTheme()
+  }
+  const renderLogoutButton = () => {
+    const {history} = this.props 
+    Cookies.remove("jwt_token")
+    history.replace("/login")
+    
+  }
+  console.log("header")
+  return (
+    <div>
+    {darkTheme ? <Dark className="header-dark" data-testid="home">
+    <Link to="/" >
+    <img src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png" alt="website logo" />
+    </Link>
+    <div>
+    <img onClick={changeLogo} className="dark-logo" src="https://media.istockphoto.com/id/1278486961/vector/moon-simple-icon-logo.jpg?s=612x612&w=0&k=20&c=nzNELqLZxTXHnFG9GLSggr8PsBpp9AjWRf9wfPJonSk=" />
+    <img data-testid="theme" className="dark-logo" src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png" alt="profile" />
+    <div>
+    <Popup 
+    model 
+    trigger = {
+      <button  type="button">Logout</button>
+    } position = "absotule"
+    >
+    {close => (
+      <>
+      <div>
+      <p>Are you sure, you want to logout</p>
+      </div>
+      <div>
+      <button type ="button" onClick={()=>close()}>Cancel</button>
+      <button type="button" onClick={renderLogoutButton}>Confirm</button>
+      </div>
+      </>
+    )}
+    </Popup>
+    </div>
+    </div> 
+    </Dark> : 
+    <Light className="header-light" data-testid="home">
+    <Link to="/">
+    <img src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png" alt="website logo" />
+    </Link>
+    <div>
+    <img onClick={changeLogo} className="dark-logo" src="https://media.istockphoto.com/id/1278486961/vector/moon-simple-icon-logo.jpg?s=612x612&w=0&k=20&c=nzNELqLZxTXHnFG9GLSggr8PsBpp9AjWRf9wfPJonSk=" />
+    <img data-testid="theme" className="dark-logo" src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png" alt="profile" />
+    <div>
+    <Popup 
+    model 
+    trigger = {
+      <button  type="button">Logout</button>
+    } position = "absotule"
+    >
+    {close => (
+      <>
+      <div>
+      <p>Are you sure, you want to logout</p>
+      </div>
+      <div>
+      <button type ="button" onClick={()=>close()}>Cancel</button>
+      <button type="button" onClick={renderLogoutButton}>Confirm</button>
+      </div>
+      </>
+    )}
+    </Popup>
+    </div>
+    </div>
+    </Light>
+    }
+    </div>
+  )
+    }}
+    </NextContext.Consumer>
+  )
+
 
   render(){
     const {apiStatus, data} = this.state
@@ -146,20 +230,21 @@ class Home extends Component{
 
     {value => {
       const {darkTheme, changeTheme, showAdd, deleteAdd} = value
+      console.log(darkTheme)
       const background = darkTheme ? "dark" : "light"
      
       return (
         <div>
-        <Header theme={darkTheme} changeTheme={changeTheme}/>
+        {this.renderHeader()}
         <HomeContainer background={darkTheme}>
         <div>
         <SideBar theme = {darkTheme} />
         </div>
         <div>
         <Add show={showAdd} deleteAdd={deleteAdd} />
-        <Input data-testid="searchButton" type="search" placeholder="Shearch" onChange={this.searchValue}></Input>
-        <button data-testid="searchButton" onClick={this.searchButtonClicked}>
-        <AiOutlineSearch />
+        <Input  type="search" placeholder="Shearch" onChange={this.searchValue}></Input>
+        <button onClick={this.searchButtonClicked}>
+        <AiOutlineSearch data-testid="searchButton" />
         </button>
         <div >
         {apis ? this.renderLoader()

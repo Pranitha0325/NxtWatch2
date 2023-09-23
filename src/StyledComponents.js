@@ -21,3 +21,15 @@ export const ListContainer = styled.li`
   display:flex;
   flex-wrap:wrap;
 `
+
+export const Dark = styled.div`
+  display:flex;
+    justify-content: space-between;
+    background-color:#181818;
+`
+
+export const Light = styled.div`
+  display:flex;
+    justify-content: space-between;
+    background-color:#f9f9f9;
+`

@@ -1,5 +1,6 @@
 
 import {TiDeleteOutline} from 'react-icons/ti'
+import {BannerContainer} from './StylingBanner'
 import './index.css'
 
 const Add = props => {
@@ -11,7 +12,7 @@ const Add = props => {
     return (
         <div >
         {show ? 
-        <div className="add-container">
+        <BannerContainer data-testid="banner" className="add-container">
         <div className="banner">
         <img className="logo" src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png" alt="nxt watch logo" />
         <p>Buy Nxt Watch Premium</p>
@@ -20,7 +21,7 @@ const Add = props => {
         <button data-testid="close" className="button" type="button" onClick={deleteBanner}>
         <TiDeleteOutline />
         </button>
-        </div>
+        </BannerContainer>
         : ''}
         </div>
     )
